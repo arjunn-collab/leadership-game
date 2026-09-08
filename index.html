@@ -380,6 +380,11 @@ function startGame(){
   }
   player=nameInput?nameInput.value.trim():"";
   email=($("email")?$("email").value.trim():"");
+ track({
+  event:"start",
+  player:player,
+  email:email
+});
   player=$("name").value.trim(); reset(); answers=[]; current=0; screen("game"); render();
 }
 
