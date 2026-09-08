@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Leadership Game</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700&display=swap');
+:root{
+ --bg:#0B2418;--bg2:#4b1724;--card:#461522;--card2:#123A27;
+ --cream:#DDF3D8;--cream2:#B9E3B0;--muted:#9CC49A;
+ --line:#35634A;--wine:#2a0b13;--shadow:rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:#DDF3D8;font-family:'Manrope',Arial,sans-serif}
+.app{width:min(760px,100%);margin:auto;padding:24px 18px 50px}
+.brand{font-family:'Playfair Display',Georgia,serif;color:#DDF3D8;font-size:19px;font-weight:700;letter-spacing:3px;margin-bottom:20px}
+.card{background:linear-gradient(145deg,var(--card),#39101b);border:1px solid #35634A;border-radius:5px;padding:34px;box-shadow:0 18px 45px var(--shadow)}
+.center{text-align:center}.hidden{display:none}
+.cover{min-height:calc(100vh - 48px);display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;padding:55px 34px}
+.cover:after{content:"";position:absolute;width:300px;height:300px;border:1px solid rgba(241,223,195,.13);border-radius:50%;right:-150px;bottom:-150px}
+.cover .eyebrow{font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#B9E3B0;margin-bottom:18px}
+.logo{width:76px;height:76px;border:1px solid #B9E3B0;border-radius:50%;display:grid;place-items:center;font-family:'Playfair Display',serif;color:#DDF3D8;font-size:42px;margin:0 auto 25px}
+h1,h2,.question,.resultName,.coverTitle{font-family:'Playfair Display',Georgia,serif}
+.coverTitle{font-size:clamp(54px,12vw,88px);line-height:.82;font-weight:600;letter-spacing:-2px;margin:0 0 28px;color:#DDF3D8}
+.coverLine{width:70px;height:1px;background:#B9E3B0;margin:0 auto 27px}
+.created{font-size:12px;text-transform:uppercase;letter-spacing:3px;color:#9CC49A;margin-bottom:7px}
+.creator{font-family:'Playfair Display',serif;font-size:27px;letter-spacing:5px;margin-bottom:4px}
+.course{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:#B9E3B0}
+.coverQuote{font-family:'Playfair Display',cursive;font-size:20px;color:#B9E3B0;margin:28px auto;max-width:400px}
+h1{font-size:clamp(42px,9vw,62px);line-height:.98;margin:0 0 18px;font-weight:600}
+p{line-height:1.65}
+.sub{color:#9CC49A;max-width:560px;margin:0 auto 25px}
+.input,.review{width:100%;border:1px solid #35634A;background:#32101a;border-radius:4px;padding:15px;color:#DDF3D8;font:inherit;outline:none}
+.input::placeholder,.review::placeholder{color:#a88e82}
+.input:focus,.review:focus{border-color:#B9E3B0}
+.btn{border:1px solid #B9E3B0;background:#DDF3D8;color:#0B2418;font:inherit;font-weight:700;padding:13px 23px;border-radius:4px;cursor:pointer;margin-top:17px;letter-spacing:.5px}
+.btn:hover{background:#f7e9d1}
+.btn.secondary{background:transparent;color:#DDF3D8;border-color:#35634A}
+.btn.print{background:transparent;color:#B9E3B0;border-color:#B9E3B0}
+.small{font-size:12px;color:#9CC49A}
+.topline{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#9CC49A}
+.progress{height:4px;background:#602c38;overflow:hidden;margin:12px 0 32px}
+.progress div{height:100%;background:#DDF3D8;transition:.25s}
+.question{color:#DDF3D8;font-size:32px;font-weight:600;line-height:1.12;margin-bottom:20px}
+.option{display:block;width:100%;text-align:left;border:1px solid #35634A;background:#4b1724;color:#DDF3D8;border-radius:4px;padding:16px;margin:9px 0;cursor:pointer;font:inherit;line-height:1.45}
+.option:hover{border-color:#B9E3B0;background:#571c2b}
+.option b{display:inline-grid;place-items:center;width:28px;height:28px;border:1px solid #a98487;color:#B9E3B0;border-radius:50%;margin-right:10px;font-size:12px}
+.resultIcon{font-family:'Playfair Display',serif;color:#B9E3B0;font-size:68px;margin-bottom:4px}
+.resultName{color:#DDF3D8;font-size:44px;font-weight:600;line-height:1.03;margin:8px 0 13px}
+.definition{background:#3a111b;border:1px solid #35634A;padding:20px;text-align:left;margin:22px 0}
+.definition strong{display:block;margin-bottom:8px;font-family:'Playfair Display',serif;color:#B9E3B0;font-size:22px}
+.tags{display:flex;gap:7px;justify-content:center;flex-wrap:wrap;margin:16px 0}
+.tag{font-size:11px;text-transform:uppercase;letter-spacing:1px;border:1px solid #8d6268;color:#B9E3B0;padding:7px 10px}
+.score{margin:10px 0;text-align:left;font-size:13px}
+.scorehead{display:flex;justify-content:space-between;margin-bottom:5px;color:#9CC49A}
+.track{height:5px;background:#602c38;overflow:hidden}
+.fill{height:100%;background:#DDF3D8}
+.reviewBox{text-align:left;margin-top:28px;padding-top:25px;border-top:1px solid #35634A}
+.reviewBox>strong{font-family:'Playfair Display',serif;color:#B9E3B0;font-size:25px}
+.review{min-height:125px;resize:vertical;margin-top:12px}
+.thanks{padding:18px;background:#3a111b;border:1px solid #35634A;margin-top:18px}
+.resultActions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:5px}
+.footerMark{margin-top:32px;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:#9d7d76}
+@media(max-width:520px){.card{padding:23px}.question{font-size:27px}.resultName{font-size:36px}.coverTitle{font-size:57px}}
+@media print{
+  body{background:#0B2418!important;color:#DDF3D8!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .app{width:100%;padding:0}
+  .brand,.resultActions,.reviewBox,.footerMark{display:none!important}
+  #result{display:block!important;box-shadow:none!important;border:1px solid #35634A!important;min-height:100vh}
+  .definition,.track{background:#3a111b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .fill,.progress div{background:#DDF3D8!important}
+  .tag{color:#DDF3D8!important;border-color:#8d6268!important}
+}
+
+.page{min-height:calc(100vh - 48px)}
+.page.hidden{display:none}
+.fadeIn{animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.instructionRule{width:45px;height:1px;background:#B9E3B0;margin:0 auto 18px}
+
+.timerWrap{display:flex;align-items:center;justify-content:center;gap:10px;margin:12px auto 8px}
+.timerRing{width:58px;height:58px;border:2px solid #B9E3B0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',Georgia,serif;font-size:21px;color:#B9E3B0}
+.timerText{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#9CC49A}
+.timerDanger{border-color:#B9E3B0!important;color:#DDF3D8!important}
+
+.deviceChoice{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:18px auto 10px}
+.deviceChoice button{min-width:145px}
+.deviceChoice button.selected{background:#B9E3B0;color:#0B2418}
+.gameLandscape .page{max-width:1180px}
+.gameLandscape #game{width:min(1120px,100%)}
+.gameLandscape #game .options{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gameLandscape #game .option{margin:0}
+.gameLandscape #game .gameNav{max-width:900px;margin-left:auto;margin-right:auto}
+@media (max-width:800px) and (orientation:portrait){
+  body.landscapePrompt::after{content:"For the best experience, rotate your phone sideways.";position:fixed;inset:0;background:#0B2418;color:#DDF3D8;display:flex;align-items:center;justify-content:center;text-align:center;padding:30px;font-family:'Playfair Display',Georgia,serif;font-size:25px;z-index:9999}
+}
+
+.attendedCount{
+  font-family:"Playfair Display",Georgia,serif !important;
+  font-size:22px !important;
+  font-weight:600 !important;
+  letter-spacing:.3px;
+  color:var(--cream2) !important;
+}
+
+/* Game enhancements */
+.progressBox{margin:8px auto 18px;max-width:720px}
+.progressTop{display:flex;justify-content:space-between;font-size:11px;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);margin-bottom:7px}
+.progressTrack{height:5px;background:#173522;border-radius:99px;overflow:hidden;border:1px solid var(--line)}
+.progressFill{height:100%;background:#9ED29A;width:0%;transition:width .3s ease}
+.challengeBadge{display:inline-block;border:1px solid var(--line);border-radius:999px;padding:5px 10px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:var(--cream2);margin-bottom:10px}
+.profileGrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:18px 0}
+.profileCard{border:1px solid var(--line);border-radius:8px;padding:16px;text-align:left;background:#102C1E}
+.profileCard h4{margin:0 0 8px;color:var(--cream2);font-family:'Playfair Display',Georgia,serif;font-size:18px}
+.profileCard ul{margin:0;padding-left:18px;color:var(--muted);line-height:1.65}
+.titleBadge{display:inline-block;margin:8px 0 15px;padding:7px 13px;border:1px solid var(--cream2);border-radius:999px;letter-spacing:1.5px;font-size:11px;text-transform:uppercase;color:var(--cream2)}
+.ratingRow{display:flex;justify-content:center;gap:8px;margin:12px 0 18px}
+.ratingBtn{border:1px solid var(--line);background:transparent;color:var(--muted);font-size:22px;padding:5px 8px;border-radius:6px;cursor:pointer}
+.ratingBtn.selected{color:#BFE8B7;border-color:#9ED29A;background:#173522}
+.finalChallenge{border:1px solid var(--cream2);padding:16px;border-radius:8px;background:#102C1E;margin:14px 0;text-align:left}
+@media(max-width:700px){.profileGrid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="brand">LEADERSHIP GAME</div>
+
+  <section id="cover" class="card center cover page">
+  <div class="eyebrow">A Student Leadership Reflection Game</div>
+  <div class="logo">◎</div>
+  <div class="coverTitle">Leadership<br>Game</div>
+  <div class="coverLine"></div>
+  <div class="created">Created by</div>
+  <div class="creator">ARJUN SINGH</div>
+  <div class="course">BBA · ENTREPRENEURSHIP</div>
+  
+  <button id="coverStart" class="btn">Start the game&nbsp; →</button>
+  <div class="footerMark">Leadership Game · Version 1.0</div>
+</section>
+
+<section id="home" class="card center hidden page">
+    <div class="logo">◎</div>
+    <div class="small" style="letter-spacing:3px;text-transform:uppercase;margin-bottom:8px">Page 02 · Before you begin<div class="truthChallenge" style="margin:18px auto;padding:18px 20px;border:1px solid var(--cream2);border-radius:8px;background:#102C1E;max-width:650px;text-align:center">
+  <div style="font-family:'Playfair Display',Georgia,serif;font-size:19px;color:var(--cream2);margin-bottom:7px">Think you’re a good leader? Prove it.</div>
+  <div style="font-family:'Manrope',Arial,sans-serif;font-size:12px;line-height:1.6;color:var(--muted)">
+    Don’t choose the answer that makes you <em>look</em> like the best leader.<br>
+    Choose the one you’d actually pick when nobody is watching.<br><br>
+    <strong style="color:var(--cream2)">There are no “perfect” answers here — only honest ones.</strong>
+    If you fake it, your result might expose you. 👀
+  </div>
+</div></div>
+    <div style="text-align:left;background:#3a111b;border:1px solid #35634A;padding:18px 20px;margin:22px 0 20px">
+      <div style="font-family:'Playfair Display',Georgia,serif;color:#B9E3B0;font-size:23px;margin-bottom:9px">A few things before you begin</div>
+      <div style="color:#9CC49A;font-size:13px;line-height:1.75">
+        <div>• Read each situation carefully before choosing.</div>
+        <div>• Pick the answer that feels most natural to you.</div>
+        <div>• There are no right or wrong answers.</div>
+        <div>• Don't choose what sounds like the “perfect” leader.</div>
+        <div>• Take your time and trust your first instinct.</div>
+      </div>
+    </div>
+    <p style="font-family:'Playfair Display',Georgia,serif;color:#B9E3B0;font-size:20px;line-height:1.45;margin:18px auto 24px;max-width:570px">
+      Be true to yourself. Be real, be honest, and answer as <em>you</em> would—not as you think a leader is expected to answer.
+    </p>
+    <h1>Discover Your Leadership Style</h1>
+    <p class="sub">Twelve simple situations designed to reveal how you naturally approach leadership.</p>
+    
+<div style="margin:18px 0 8px">
+  <div class="small" style="letter-spacing:2px;text-transform:uppercase;margin-bottom:10px">How are you playing?</div>
+  <div class="deviceChoice">
+    <button type="button" id="phoneChoice" class="btn secondary">📱 Phone</button>
+    <button type="button" id="desktopChoice" class="btn secondary">💻 Desktop / Laptop</button>
+  </div>
+  <div id="deviceHint" class="small">Choose your device to set the best game view.</div>
+</div>
+<input id="name" class="input" maxlength="30" placeholder="Your name · optional">
+    <button id="start" class="btn">Start the questions&nbsp; →</button>
+    <p class="small">12 questions · 4 choices each · about 3 minutes</p><p class="small">A student-made leadership reflection game</p>
+  </section>
+
+  <section id="game" class="card hidden page">
+    <div class="topline"><span id="count"></span><span>PAGE 03 · GAME</span></div>
+    <div id="progressBox" class="progressBox">
+  <div class="progressTop"><span id="progressLabel">Question 1 / 12</span><span>Leadership Journey</span></div>
+  <div class="progressTrack"><div id="progressFill" class="progressFill"></div></div>
+</div>
+<div class="challengeBadge" id="challengeBadge">Leadership Challenge</div>
+<div class="timerWrap">
+      <div id="timer" class="timerRing">20</div>
+      <div class="timerText">seconds left</div>
+    </div>
+    <div class="progress"><div id="progress"></div></div>
+    <div id="question" class="question"></div>
+    <div id="options"></div>
+    <div class="gameNav" style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:22px">
+      <button id="previous" class="btn secondary" style="margin-top:0">← Previous</button>
+      <span class="small">You can change your answer anytime</span>
+      <button id="next" class="btn" style="margin-top:0">Next →</button>
+    </div>
+  </section>
+
+  
+<section id="appreciation" class="card center hidden page">
+  <div class="eyebrow" style="font-size:11px;letter-spacing:4px;text-transform:uppercase;color:#B9E3B0;margin-bottom:18px">Page 04 · Completed</div>
+  <div class="logo">✓</div>
+  <div class="coverTitle" style="font-size:clamp(44px,10vw,68px);line-height:.95;margin-bottom:20px">Great Job.</div>
+  <div class="coverLine"></div>
+  <p id="attendedCount" style="font-family:'Playfair Display',Georgia,serif;color:#B9E3B0;font-size:22px;line-height:1.45;max-width:560px;margin:0 auto 14px">You answered 0 out of 12 questions.</p>
+  <p style="font-family:'Playfair Display',Georgia,serif;color:#B9E3B0;font-size:22px;line-height:1.45;max-width:560px;margin:0 auto 14px">
+    You’ve completed the Leadership Game.
+  </p>
+  <p style="color:#9CC49A;max-width:560px;margin:0 auto 28px">
+    Thank you for taking a few minutes to reflect on how you think, decide and work with others. Your answers are uniquely yours — and that is what makes your result meaningful.
+  </p>
+
+  <p class="small" style="max-width:500px;margin:0 auto 4px">
+    Your result is ready. Remember: a leadership style is not a box — it is a starting point for understanding yourself and growing.
+  </p>
+  <button id="viewResults" class="btn">View my results&nbsp; →</button>
+</section>
+
+<section id="result" class="card center hidden page">
+    <div class="resultIcon" id="resultIcon"></div>
+    <div class="small">PAGE 05 · YOUR RESULT</div>
+  <div id="notIdentified" class="hidden" style="margin:18px auto;padding:18px 20px;max-width:600px;background:#3a111b;border:1px solid #35634A;color:#B9E3B0;font-family:'Manrope',Arial,sans-serif;line-height:1.6">
+    <strong>Leadership Type: Not Found</strong><br>You did not select any options, so your leadership type could not be identified. Please try again and answer at least one question to discover your result.
+  </div>
+    <div class="resultName" id="resultName"></div>
+    <div class="definition">
+      <strong>Your leadership style</strong>
+      <span id="definition"></span>
+    </div>
+    <div class="tags" id="tags"></div>
+    <div id="scoreList"></div>
+    <div class="resultActions">
+      <button id="printResults" class="btn print">Print / Save Results</button>
+    </div>
+
+    
+<div id="profileExtras" class="hidden">
+  <div id="titleBadge" class="titleBadge"></div>
+  <div class="profileGrid">
+    <div class="profileCard">
+      <h4>Your strengths</h4>
+      <ul id="strengths"></ul>
+    </div>
+    <div class="profileCard">
+      <h4>Keep in mind</h4>
+      <ul id="watchouts"></ul>
+    </div>
+  </div>
+</div>
+<div id="reviewBox" class="reviewBox">
+      <strong>Tell us what you thought</strong>
+      <p class="small">Tell us what you liked, what felt easy or difficult, or what we could improve.</p>
+      <div id="ratingRow" class="ratingRow" aria-label="Rate the game">
+  <button type="button" class="ratingBtn" data-rating="1">★</button>
+  <button type="button" class="ratingBtn" data-rating="2">★</button>
+  <button type="button" class="ratingBtn" data-rating="3">★</button>
+  <button type="button" class="ratingBtn" data-rating="4">★</button>
+  <button type="button" class="ratingBtn" data-rating="5">★</button>
+</div>
+<div class="reviewPrompt" style="font-family:'Playfair Display',Georgia,serif;font-size:22px;color:var(--cream2);margin:8px 0 10px">Please leave a review about your experience playing the game.</div><textarea id="review" class="review" placeholder="Share your thoughts here..."></textarea>
+      <button id="submitReview" class="btn">Submit your review</button>
+      <div id="thanks" class="thanks hidden">
+        Thank you for your feedback. Your response has been saved on this device.
+      </div>
+    </div>
+
+    <button id="again" class="btn secondary">↻ Try again</button>
+  </section>
+</div>
+
+<script>
+const TYPES={
+ transactional:{name:"Transactional Leader",icon:"▣",def:"You like clear goals, rules and responsibilities. You motivate people by setting expectations, tracking results and rewarding good performance.",tags:["Clear goals","Accountability","Results"]},
+ transformational:{name:"Transformational Leader",icon:"↗",def:"You inspire people with a bigger goal and encourage them to improve, try new ideas and make positive changes.",tags:["Vision","Inspiration","Change"]},
+ situational:{name:"Situational Leader",icon:"↺",def:"You change your leadership approach depending on the person, task and situation. You know that one style does not work for everyone.",tags:["Adaptable","Flexible","Practical"]},
+ authentic:{name:"Authentic Leader",icon:"◉",def:"You try to lead honestly and stay true to your values. You are open about your thoughts, decisions and mistakes.",tags:["Honest","Self-aware","Trust"]},
+ servant:{name:"Servant Leader",icon:"♡",def:"You put your team first. You listen, support people and help them grow so the whole team can succeed.",tags:["Supportive","Listening","Team-first"]},
+ trait:{name:"Trait-Based Leader",icon:"★",def:"You show leadership through personal qualities such as confidence, courage, initiative, determination and resilience.",tags:["Confidence","Initiative","Resilience"]},
+ ethical:{name:"Ethical Leader",icon:"◇",def:"You focus on doing what is right and fair. You think about honesty, responsibility and how your decisions affect others.",tags:["Fairness","Integrity","Responsibility"]}
+};
+
+/* Four choices per question. The leadership style attached to each choice is hidden. */
+const QUESTIONS=[
+{q:"Your group is late finishing an assignment. What would you do first?",a:[
+["Set a clear new deadline and divide the remaining work.","transactional"],
+["Remind everyone why the project matters and motivate them.","transformational"],
+["Ask what caused the delay and change the plan if needed.","situational"],
+["Check that the new plan is fair to everyone.","ethical"]]},
+{q:"A teammate is very quiet during group discussions. What would you do?",a:[
+["Ask them privately if they need any support.","servant"],
+["Be honest and tell them you would like to hear their ideas.","authentic"],
+["Encourage them confidently to share their opinion.","trait"],
+["Try a different way of involving them, like asking one-to-one.","situational"]]},
+{q:"Two people in your group strongly disagree. What would you do?",a:[
+["Listen to both sides and help them find a fair solution.","servant"],
+["Set some clear rules for how the group will decide.","transactional"],
+["Explain openly what you think and why.","authentic"],
+["Look for a solution that is fair to both people.","ethical"]]},
+{q:"Your group is losing motivation halfway through a difficult project.",a:[
+["Remind everyone about the bigger goal and what you can achieve.","transformational"],
+["Lead by example and keep working with confidence.","trait"],
+["Ask each person what would help them stay motivated.","servant"],
+["Change your approach depending on what each person needs.","situational"]]},
+{q:"You make a mistake that affects your group's work. What do you do?",a:[
+["Admit it and be honest about what happened.","authentic"],
+["Take responsibility and quickly organize a solution.","trait"],
+["Focus on fixing the problem and review the process afterward.","transactional"],
+["Think about how the mistake affects everyone before deciding what to do.","ethical"]]},
+{q:"A new student joins your group and does not know what to do.",a:[
+["Give them clear instructions and a simple task.","transactional"],
+["Spend time helping them understand and feel comfortable.","servant"],
+["Ask what they already know and adjust your help.","situational"],
+["Encourage them to take initiative and believe they can do it.","trait"]]},
+{q:"You have to make an important decision with limited information.",a:[
+["Make the best decision you can and take responsibility for it.","trait"],
+["Tell the group honestly what you know and what you do not know.","authentic"],
+["Choose the option that is most fair and responsible.","ethical"],
+["Think about the long-term goal before choosing.","transformational"]]},
+{q:"Your group wants to make a big change to the project at the last minute.",a:[
+["Check whether the change fits the current situation and deadline.","situational"],
+["Ask who might be affected and whether the change is fair.","ethical"],
+["Set clear conditions so everyone knows what has to be done.","transactional"],
+["Look at whether the change could make the project much better.","transformational"]]},
+{q:"A teammate is struggling with their part of the work.",a:[
+["Ask how you can help them and listen to their problem.","servant"],
+["Help them build confidence and encourage them to keep trying.","trait"],
+["Ask what kind of guidance works best for them.","situational"],
+["Talk honestly about the problem instead of ignoring it.","authentic"]]},
+{q:"Your team gets an excellent result. What would you do?",a:[
+["Recognize the people who met their responsibilities.","transactional"],
+["Celebrate the team and set an exciting new goal.","transformational"],
+["Give everyone fair credit for their contribution.","ethical"],
+["Thank the team and highlight how everyone helped each other.","servant"]]},
+{q:"Someone gives you criticism about your leadership.",a:[
+["Listen honestly and think about whether the criticism is true.","authentic"],
+["Use it as a chance to improve and become a better leader.","transformational"],
+["Stay confident but consider what you can learn from it.","trait"],
+["Ask for specific examples so you know what needs to change.","transactional"]]},
+{q:"Your team has to choose between a faster option and a fairer option.",a:[
+["Think about how the decision affects everyone involved.","ethical"],
+["Choose based on what the situation needs most.","situational"],
+["Ask the team what support would help everyone handle the decision.","servant"],
+["Choose the option that supports the bigger purpose of the project.","transformational"]]}
+];
+
+let current=0, scores={}, player="", answers=[], timerInterval=null, timeLeft=20, deviceMode="", selectedRating=0;
+const $=id=>document.getElementById(id);
+
+function reset(){scores={};Object.keys(TYPES).forEach(k=>scores[k]=0)}
+function screen(id){
+  ["cover","home","game","appreciation","result"].forEach(x=>{
+    const el=$(x);
+    el.classList.toggle("hidden",x!==id);
+    if(x===id){el.classList.remove("fadeIn"); void el.offsetWidth; el.classList.add("fadeIn");}
+  });
+  window.scrollTo(0,0);
+}
+function startGame(){
+  if(!deviceMode){alert("Please choose Phone or Desktop / Laptop first."); return;}
+  player=$("name").value.trim(); reset(); answers=[]; current=0; screen("game"); render();
+}
+
+
+function chooseDevice(mode){
+  deviceMode=mode;
+  document.body.classList.toggle("gameLandscape", mode==="phone");
+  document.body.classList.toggle("landscapePrompt", mode==="phone");
+  $("phoneChoice").classList.toggle("selected", mode==="phone");
+  $("desktopChoice").classList.toggle("selected", mode==="desktop");
+  $("deviceHint").textContent = mode==="phone"
+    ? "Phone mode selected — the game will use a landscape layout."
+    : "Desktop mode selected — the game will use the normal desktop layout.";
+}
+function nextQuestion(){
+  if(current>=QUESTIONS.length-1){
+    finish();
+    return;
+  }
+  // Next without an answer simply moves forward; unanswered questions stay unanswered.
+  stopTimer();
+  current++;
+  render();
+}
+
+function stopTimer(){
+  if(timerInterval){clearInterval(timerInterval);timerInterval=null;}
+}
+function startTimer(){
+  stopTimer(); timeLeft=20;
+  const t=$("timer"); if(!t)return;
+  t.textContent=timeLeft; t.classList.remove("timerDanger");
+  timerInterval=setInterval(()=>{
+    timeLeft--; t.textContent=timeLeft;
+    if(timeLeft<=5)t.classList.add("timerDanger");
+    if(timeLeft<=0){
+      stopTimer(); current++;
+      if(current<QUESTIONS.length)render(); else finish();
+    }
+  },1000);
+}
+
+function render(){
+  if($("progressLabel")) $("progressLabel").textContent=`Question ${current+1} / ${QUESTIONS.length}`;
+  if($("progressFill")) $("progressFill").style.width=`${((current+1)/QUESTIONS.length)*100}%`;
+  if($("challengeBadge")) $("challengeBadge").textContent=(current===QUESTIONS.length-1?"Final Challenge":"Leadership Challenge");
+  const item=QUESTIONS[current];
+  $("count").textContent=`Question ${current+1} of ${QUESTIONS.length}`;
+  $("progress").style.width=`${((current)/QUESTIONS.length)*100}%`;
+  $("question").textContent=item.q;
+  const box=$("options"); box.innerHTML="";
+  item.a.forEach((choice,i)=>{
+    const b=document.createElement("button");
+    b.className="option";
+    b.innerHTML=`<b>${String.fromCharCode(65+i)}</b>${choice[0]}`;
+    if(answers[current] && answers[current].type===choice[1]){
+      b.style.borderColor="#B9E3B0";
+      b.style.background="#571c2b";
+    }
+    b.addEventListener("click",()=>answer(choice[1]));
+    box.appendChild(b);
+  });
+  $("previous").style.visibility = current===0 ? "hidden" : "visible";
+  $("next").textContent = current===QUESTIONS.length-1 ? "Finish →" : "Next →";
+  startTimer();
+}
+function answer(type){
+  stopTimer();
+  // If the player is changing an earlier answer, remove the old score first.
+  if(answers[current]) scores[answers[current].type]--;
+  answers[current]={type};
+  scores[type]++;
+  current++;
+  if(current<QUESTIONS.length) render(); else finish();
+}
+function previousQuestion(){
+  if(current<=0) return;
+  stopTimer();
+  current--;
+  render();
+}
+
+const LEADERSHIP_EXTRAS={
+  transactional:{title:"THE ORGANIZER",strengths:["Clear with goals and expectations","Keeps teams focused on tasks","Follows through on responsibilities"],watchouts:["May focus too much on rules","Can miss creative ideas when under pressure"]},
+  transformational:{title:"THE VISIONARY",strengths:["Inspires people toward a goal","Encourages new ideas","Builds motivation in a team"],watchouts:["Can expect a lot from others","Big ideas still need practical planning"]},
+  situational:{title:"THE ADAPTER",strengths:["Adjusts to different people","Knows when to guide or support","Handles changing situations well"],watchouts:["Changing styles can sometimes feel inconsistent","Needs to communicate decisions clearly"]},
+  authentic:{title:"THE REAL ONE",strengths:["Stays true to personal values","Builds trust through honesty","Is comfortable being genuine"],watchouts:["Being direct can sometimes be misunderstood","Personal values should still leave room for others"]},
+  servant:{title:"THE TEAM BUILDER",strengths:["Listens to people","Supports team members","Creates a cooperative environment"],watchouts:["May put others first too often","Needs to protect time for important decisions"]},
+  trait:{title:"THE NATURAL LEADER",strengths:["Shows confidence and initiative","Takes responsibility naturally","Can influence people through personal qualities"],watchouts:["Natural confidence still needs active listening","Leadership skills can grow with experience"]},
+  ethical:{title:"THE PRINCIPLED LEADER",strengths:["Thinks about fairness","Makes responsible choices","Builds trust through consistency"],watchouts:["Doing the right thing can take extra time","Fair decisions may not please everyone"]}
+};
+
+function finish(){
+  stopTimer();
+  const answeredCount=answers.filter(Boolean).length;
+  if($("attendedCount")) $("attendedCount").textContent=`You answered ${answeredCount} out of ${QUESTIONS.length} questions.`;
+
+  // If nothing was answered, NEVER default to a leadership type.
+  if(answeredCount===0){
+    $("resultIcon").textContent="—";
+    $("resultName").textContent="Leadership Type: Not Found";
+    $("definition").textContent="No leadership style could be identified because you did not select any options.";
+    $("tags").innerHTML="";
+    $("scoreList").innerHTML="";
+    $("review").value="";
+    $("thanks").classList.add("hidden");
+    $("reviewBox").classList.remove("hidden");
+    screen("appreciation");
+    return;
+  }
+
+  const ranked=Object.keys(TYPES).sort((a,b)=>scores[b]-scores[a]);
+  const top=ranked[0], max=Math.max(...Object.values(scores));
+  const extra=LEADERSHIP_EXTRAS[top]||{};
+  if($("profileExtras")) $("profileExtras").classList.remove("hidden");
+  if($("titleBadge")) $("titleBadge").textContent=extra.title||"LEADERSHIP PROFILE";
+  if($("strengths")) $("strengths").innerHTML=(extra.strengths||[]).map(x=>`<li>${x}</li>`).join("");
+  if($("watchouts")) $("watchouts").innerHTML=(extra.watchouts||[]).map(x=>`<li>${x}</li>`).join("");
+  $("resultIcon").textContent=TYPES[top].icon;
+  $("resultName").textContent=(player?player+", ":"")+TYPES[top].name;
+  $("definition").textContent=TYPES[top].def;
+  $("tags").innerHTML=TYPES[top].tags.map(t=>`<span class="tag">${t}</span>`).join("");
+  $("scoreList").innerHTML=ranked.map(k=>`
+    <div class="score">
+      <div class="scorehead"><span>${TYPES[k].name}</span><span>${scores[k]}</span></div>
+      <div class="track"><div class="fill" style="width:${max?((scores[k]/max)*100):0}%"></div></div>
+    </div>`).join("");
+  $("review").value="";
+  $("thanks").classList.add("hidden");
+  $("reviewBox").classList.remove("hidden");
+  screen("appreciation");
+}
+function submitReview(){
+  const text=$("review").value.trim();
+  if(!text){$("review").focus();return}
+  const reviews=JSON.parse(localStorage.getItem("leadershipLabReviews")||"[]");
+  reviews.push({review:text,leader:$("resultName").textContent,at:new Date().toISOString()});
+  localStorage.setItem("leadershipLabReviews",JSON.stringify(reviews));
+  $("thanks").classList.remove("hidden");
+  $("review").disabled=true;
+  $("submitReview").disabled=true;
+}
+function again(){reset(); answers=[]; player=""; $("name").value=""; screen("cover")}
+document.addEventListener("DOMContentLoaded",()=>{
+  $("coverStart").addEventListener("click",()=>screen("home"));
+  $("viewResults").addEventListener("click",()=>screen("result"));
+  $("start").addEventListener("click",startGame);
+  $("previous").addEventListener("click",previousQuestion);
+  $("next").addEventListener("click",nextQuestion);
+  $("phoneChoice").addEventListener("click",()=>chooseDevice("phone"));
+  $("desktopChoice").addEventListener("click",()=>chooseDevice("desktop"));
+  $("again").addEventListener("click",again);
+  $("submitReview").addEventListener("click",submitReview);
+  $("printResults").addEventListener("click",()=>window.print());
+});
+document.querySelectorAll(".ratingBtn").forEach(btn=>btn.addEventListener("click",()=>{
+    selectedRating=Number(btn.dataset.rating);
+    document.querySelectorAll(".ratingBtn").forEach(b=>b.classList.toggle("selected",Number(b.dataset.rating)<=selectedRating));
+  }));
+</script>
+</body>
+</html>
