@@ -467,9 +467,14 @@ const LEADERSHIP_EXTRAS={
   trait:{title:"THE NATURAL LEADER",strengths:["Shows confidence and initiative","Takes responsibility naturally","Can influence people through personal qualities"],watchouts:["Natural confidence still needs active listening","Leadership skills can grow with experience"]},
   ethical:{title:"THE PRINCIPLED LEADER",strengths:["Thinks about fairness","Makes responsible choices","Builds trust through consistency"],watchouts:["Doing the right thing can take extra time","Fair decisions may not please everyone"]}
 };
+ function finish(){
+    stopTimer();
 
-function finish(){
-  stopTimer();
+    track({
+        event:"finish",
+        player:player,
+        email:email
+    });
   const answeredCount=answers.filter(Boolean).length;
   if($("attendedCount")) $("attendedCount").textContent=`You answered ${answeredCount} out of ${QUESTIONS.length} questions.`;
 
